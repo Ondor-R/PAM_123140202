@@ -1,4 +1,4 @@
-Nama: Reyhan Oktavian Putra
+Nama: Reyhan Oktavian Putra <br>
 NIM: 123140202
 
 Tugas1 - MyFirstKMPApp <br>
