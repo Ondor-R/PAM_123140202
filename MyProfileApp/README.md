@@ -1,7 +1,6 @@
 Nama: Reyhan Oktavian Putra <br>
 NIM: 123140202 <br>
-
-# <center> Tugas 3 </center>
+Tugas 3
 
 ## Screenshots
 Screenshot Mobile:<br>
