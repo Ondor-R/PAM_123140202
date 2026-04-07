@@ -1,6 +1,7 @@
-package com.example.myprofileapp
+package com.example.myprofileapp.screens
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -15,10 +16,47 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myprofileapp.viewmodel.ProfileViewModel
-import org.jetbrains.compose.resources.painterResource
 import myprofileapp.composeapp.generated.resources.Res
-import myprofileapp.composeapp.generated.resources.profilepict
 import myprofileapp.composeapp.generated.resources.boxbg
+import myprofileapp.composeapp.generated.resources.profilepict
+import org.jetbrains.compose.resources.painterResource
+
+@Composable
+fun ProfileScreen(viewModel: ProfileViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+    var isEditing by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(
+            Modifier.fillMaxWidth().padding(16.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Dark Mode")
+            Spacer(Modifier.width(8.dp))
+            Switch(
+                checked = uiState.isDarkMode,
+                onCheckedChange = { viewModel.toggleDarkMode(it) }
+            )
+        }
+
+        if (isEditing) {
+            EditProfileForm(
+                currentName = uiState.name,
+                currentBio = uiState.bio,
+                onSave = { n, b ->
+                    viewModel.updateProfile(n, b)
+                    isEditing = false
+                },
+                onCancel = { isEditing = false }
+            )
+        } else {
+            ProfileHeader(name = uiState.name, onEditClick = { isEditing = true })
+            HelloItem()
+            InfoItem(bio = uiState.bio)
+        }
+    }
+}
 
 @Composable
 fun ProfileHeader(name: String, onEditClick: () -> Unit) {
@@ -112,49 +150,6 @@ fun EditProfileForm(
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             TextButton(onClick = onCancel) { Text("Batal") }
             Button(onClick = { onSave(nameInput, bioInput) }) { Text("Simpan") }
-        }
-    }
-}
-
-@Composable
-fun App(viewModel: ProfileViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
-    var isEditing by remember { mutableStateOf(false) }
-
-    val colorScheme = if (uiState.isDarkMode) darkColorScheme() else lightColorScheme()
-
-    MaterialTheme(colorScheme = colorScheme) {
-        Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Row(
-                    Modifier.fillMaxWidth().padding(16.dp),
-                    horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text("Dark Mode")
-                    Spacer(Modifier.width(8.dp))
-                    Switch(
-                        checked = uiState.isDarkMode,
-                        onCheckedChange = { viewModel.toggleDarkMode(it) }
-                    )
-                }
-
-                if (isEditing) {
-                    EditProfileForm(
-                        currentName = uiState.name,
-                        currentBio = uiState.bio,
-                        onSave = { n, b ->
-                            viewModel.updateProfile(n, b)
-                            isEditing = false
-                        },
-                        onCancel = { isEditing = false }
-                    )
-                } else {
-                    ProfileHeader(name = uiState.name, onEditClick = { isEditing = true })
-                    HelloItem()
-                    InfoItem(bio = uiState.bio)
-                }
-            }
         }
     }
 }
