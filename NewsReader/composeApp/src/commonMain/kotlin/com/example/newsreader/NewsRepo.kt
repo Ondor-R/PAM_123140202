@@ -15,7 +15,7 @@ class NewsRepository {
         }
     }
 
-    private val apiKey = "2d91add0a40a4268b3a2f1f7235b11ec" // api keyny disni
+    private val apiKey = "API-Disni" // api keyny disni
     private val baseUrl = "https://newsapi.org/v2/top-headlines?country=us&apiKey=$apiKey"
 
     suspend fun getTopHeadlines(): Result<List<Article>> {
