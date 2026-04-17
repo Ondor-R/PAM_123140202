@@ -2,7 +2,7 @@ Nama: Reyhan Oktavian Putra <br>
 NIM: 123140202
 
 Tugas6 - NewsReader <br>
-Link video
+Link video: https://drive.google.com/file/d/1JnneLDaL6UWhxHi_yJUzN4RRxmS_MDOV/view?usp=sharing
 
 Screenshot: <br>
 Succeed State:
