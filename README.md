@@ -1,23 +1,25 @@
 Nama: Reyhan Oktavian Putra <br>
 NIM: 123140202
 
-Tugas6 - NewsReader <br>
-Link video: https://drive.google.com/file/d/1JnneLDaL6UWhxHi_yJUzN4RRxmS_MDOV/view?usp=sharing
+Tugas7 - NotesApp with CRUD <br>
+Link video: https://drive.google.com/file/d/1u25DYVcsNtUKUEs3-Z2XkNqTQoex14Q2/view?usp=sharing 
 
 Screenshot: <br>
-Succeed State:
+Create: <br>
+<img width="323" height="722" alt="image" src="https://github.com/user-attachments/assets/29e1ef31-7b40-4c53-a7f4-382ac774e513" />
 <br>
-<img width="360" height="804" alt="image" src="https://github.com/user-attachments/assets/7db9eb6c-10b2-4565-b176-1e49d36d0003" />
+Read: <br>
+<img width="324" height="724" alt="image" src="https://github.com/user-attachments/assets/129cfd9e-8924-43ca-9f01-6b77bdfc5665" />
 <br>
-<img width="356" height="798" alt="image" src="https://github.com/user-attachments/assets/e6738067-02ca-4181-b412-2514aab8063c" />
+Update: <br>
+<img width="322" height="721" alt="image" src="https://github.com/user-attachments/assets/66bfd657-7010-4b0b-88ae-a7a4b503a249" />
 <br>
-Error State:
+Delete: <br>
+<img width="319" height="728" alt="image" src="https://github.com/user-attachments/assets/8747a57c-e420-43fa-bcd9-13a86e8699aa" />
 <br>
-<img width="372" height="741" alt="image" src="https://github.com/user-attachments/assets/1e426eba-6070-41d8-8184-7b6fd3648dd7" />
-<br>
-Loading State:
-<br>
-<img width="350" height="716" alt="image" src="https://github.com/user-attachments/assets/7c2fe674-ba37-4507-b634-82a8cd7da022" />
+Search: <br>
+<img width="323" height="724" alt="image" src="https://github.com/user-attachments/assets/893a17da-6c2f-4bfe-886f-4ed33cb6353f" />
+
 
 
 
