@@ -12,11 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.myprofileapp.viewmodel.ProfileViewModel
+import com.example.myprofileapp.db.NoteEntity
 
 @Composable
 fun FavoritesScreen(viewModel: ProfileViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
-    val favoriteNotes = uiState.notes.filter { it.isFavorite }
+    // Membaca StateFlow langsung dari ViewModel
+    val favoriteNotes by viewModel.favoriteNotes.collectAsState()
 
     if (favoriteNotes.isEmpty()) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

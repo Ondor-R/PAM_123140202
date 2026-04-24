@@ -1,5 +1,4 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -7,15 +6,19 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.composeHotReload)
+    id("app.cash.sqldelight") version "2.0.1"
 }
 
 kotlin {
+    // INI YANG BIKIN CRASH SEBELUMNYA, SUDAH DIPERBAIKI:
     androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
         }
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -25,14 +28,15 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     jvm()
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.activity.compose)
-
+            implementation("app.cash.sqldelight:android-driver:2.0.1")
+            implementation("androidx.datastore:datastore-preferences:1.1.0")
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -45,6 +49,12 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
             implementation(compose.materialIconsExtended)
+
+            // Library Lokal & Database
+            implementation("app.cash.sqldelight:runtime:2.0.1")
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
+            implementation("androidx.datastore:datastore-preferences-core:1.1.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -52,6 +62,14 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("NoteDatabase") {
+            packageName.set("com.example.myprofileapp.db")
         }
     }
 }
@@ -90,7 +108,6 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "com.example.myprofileapp.MainKt"
-
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "com.example.myprofileapp"

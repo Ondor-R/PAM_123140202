@@ -1,47 +1,55 @@
 package com.example.myprofileapp.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.myprofileapp.data.Note
-import com.example.myprofileapp.data.ProfileUiState
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlin.random.Random
+import androidx.lifecycle.viewModelScope
+import com.example.myprofileapp.data.ProfileRepository
+import com.example.myprofileapp.db.NoteEntity
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
 
-class ProfileViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(ProfileUiState())
-    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+// State khusus untuk Notes UI
+sealed class NotesUiState {
+    object Loading : NotesUiState()
+    object Empty : NotesUiState()
+    data class Success(val notes: List<NoteEntity>) : NotesUiState()
+}
 
-    fun addNote(title: String, content: String) {
-        val newNote = Note(
-            id = Random.nextInt(1000, 9999).toString(),
-            title = title,
-            content = content
-        )
-        _uiState.update { it.copy(notes = it.notes + newNote) }
+class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
+
+    // State Profil
+    val isDarkMode = repository.isDarkMode.stateIn(viewModelScope, SharingStarted.Eagerly, false)
+    val name = repository.profileName.stateIn(viewModelScope, SharingStarted.Eagerly, "")
+    val bio = repository.profileBio.stateIn(viewModelScope, SharingStarted.Eagerly, "")
+
+    // State Notes dengan Fitur Search
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
+    val notesUiState: StateFlow<NotesUiState> = _searchQuery
+        .flatMapLatest { query -> repository.getNotes(query) }
+        .map { if (it.isEmpty()) NotesUiState.Empty else NotesUiState.Success(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), NotesUiState.Loading)
+
+    val favoriteNotes = repository.getFavoriteNotes()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    // --- Actions ---
+    fun updateSearchQuery(query: String) { _searchQuery.value = query }
+    fun toggleDarkMode(isDark: Boolean) = viewModelScope.launch { repository.updateTheme(isDark) }
+    fun updateProfile(newName: String, newBio: String) = viewModelScope.launch { repository.updateProfile(newName, newBio) }
+
+    fun addNote(title: String, content: String) = viewModelScope.launch {
+        val id = Clock.System.now().toEpochMilliseconds().toString() // Simple ID generator
+        repository.saveNote(id, title, content)
     }
 
-    fun deleteNote(noteId: String) {
-        _uiState.update { currentState ->
-            currentState.copy(notes = currentState.notes.filter { it.id != noteId })
-        }
-    }
+    fun deleteNote(id: String) = viewModelScope.launch { repository.deleteNote(id) }
+    fun toggleFavorite(id: String) = viewModelScope.launch { repository.toggleFavorite(id) }
 
-    fun toggleFavorite(noteId: String) {
-        _uiState.update { currentState ->
-            val updatedNotes = currentState.notes.map { note ->
-                if (note.id == noteId) note.copy(isFavorite = !note.isFavorite) else note
-            }
-            currentState.copy(notes = updatedNotes)
-        }
-    }
+    fun getNoteById(id: String): Flow<NoteEntity?> = repository.getNoteById(id)
 
-    fun updateProfile(newName: String, newBio: String) {
-        _uiState.update { it.copy(name = newName, bio = newBio) }
-    }
-
-    fun toggleDarkMode(enabled: Boolean) {
-        _uiState.update { it.copy(isDarkMode = enabled) }
+    fun updateNote(id: String, title: String, content: String) = viewModelScope.launch {
+        repository.updateNote(id, title, content)
     }
 }

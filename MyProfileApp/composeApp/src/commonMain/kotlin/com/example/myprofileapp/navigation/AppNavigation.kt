@@ -35,7 +35,7 @@ fun AppNavigation(viewModel: ProfileViewModel = viewModel()) {
                 arguments = listOf(navArgument("noteId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val noteId = backStackEntry.arguments?.getString("noteId")
-                NoteDetailScreen(navController, noteId)
+                NoteDetailScreen(navController, noteId, viewModel)
             }
 
             composable(Screen.AddNote.route) { AddNoteScreen(navController, viewModel) }
@@ -45,7 +45,7 @@ fun AppNavigation(viewModel: ProfileViewModel = viewModel()) {
                 arguments = listOf(navArgument("noteId") { type = NavType.StringType })
             ) { backStackEntry ->
                 val noteId = backStackEntry.arguments?.getString("noteId")
-                EditNoteScreen(navController, noteId)
+                EditNoteScreen(navController, noteId, viewModel)
             }
         }
     }

@@ -23,7 +23,11 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
+    // Membaca state yang sudah dipecah secara individual
+    val isDarkMode by viewModel.isDarkMode.collectAsState()
+    val name by viewModel.name.collectAsState()
+    val bio by viewModel.bio.collectAsState()
+
     var isEditing by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -35,15 +39,15 @@ fun ProfileScreen(viewModel: ProfileViewModel = viewModel()) {
             Text("Dark Mode")
             Spacer(Modifier.width(8.dp))
             Switch(
-                checked = uiState.isDarkMode,
+                checked = isDarkMode,
                 onCheckedChange = { viewModel.toggleDarkMode(it) }
             )
         }
 
         if (isEditing) {
             EditProfileForm(
-                currentName = uiState.name,
-                currentBio = uiState.bio,
+                currentName = name,
+                currentBio = bio,
                 onSave = { n, b ->
                     viewModel.updateProfile(n, b)
                     isEditing = false
@@ -51,9 +55,9 @@ fun ProfileScreen(viewModel: ProfileViewModel = viewModel()) {
                 onCancel = { isEditing = false }
             )
         } else {
-            ProfileHeader(name = uiState.name, onEditClick = { isEditing = true })
+            ProfileHeader(name = name, onEditClick = { isEditing = true })
             HelloItem()
-            InfoItem(bio = uiState.bio)
+            InfoItem(bio = bio)
         }
     }
 }

@@ -1,0 +1,32 @@
+CREATE TABLE NoteEntity (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    isFavorite INTEGER NOT NULL DEFAULT 0,
+    createdAt INTEGER NOT NULL
+);
+
+getAllNotes:
+SELECT * FROM NoteEntity ORDER BY createdAt DESC;
+
+searchNotes:
+SELECT * FROM NoteEntity WHERE title LIKE ('%' || :query || '%') OR content LIKE ('%' || :query || '%') ORDER BY createdAt DESC;
+
+getFavorites:
+SELECT * FROM NoteEntity WHERE isFavorite = 1 ORDER BY createdAt DESC;
+
+insertNote:
+INSERT OR REPLACE INTO NoteEntity(id, title, content, isFavorite, createdAt)
+VALUES (?, ?, ?, ?, ?);
+
+deleteNote:
+DELETE FROM NoteEntity WHERE id = ?;
+
+toggleFavorite:
+UPDATE NoteEntity SET isFavorite = CASE WHEN isFavorite = 1 THEN 0 ELSE 1 END WHERE id = ?;
+
+getNoteById:
+SELECT * FROM NoteEntity WHERE id = ?;
+
+updateNote:
+UPDATE NoteEntity SET title = ?, content = ? WHERE id = ?;
