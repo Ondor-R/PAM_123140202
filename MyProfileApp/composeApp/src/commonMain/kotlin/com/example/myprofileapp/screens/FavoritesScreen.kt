@@ -16,7 +16,6 @@ import com.example.myprofileapp.db.NoteEntity
 
 @Composable
 fun FavoritesScreen(viewModel: ProfileViewModel) {
-    // Membaca StateFlow langsung dari ViewModel
     val favoriteNotes by viewModel.favoriteNotes.collectAsState()
 
     if (favoriteNotes.isEmpty()) {

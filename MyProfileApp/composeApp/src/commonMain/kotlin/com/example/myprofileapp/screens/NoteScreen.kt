@@ -31,7 +31,7 @@ fun NotesScreen(navController: NavController, viewModel: ProfileViewModel) {
         }
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding)) {
-            // Search Bar
+
             OutlinedTextField(
                 value = searchQuery,
                 onValueChange = { viewModel.updateSearchQuery(it) },
@@ -40,7 +40,7 @@ fun NotesScreen(navController: NavController, viewModel: ProfileViewModel) {
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
 
-            // UI States
+
             when (val state = uiState) {
                 is NotesUiState.Loading -> {
                     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -133,7 +133,6 @@ fun AddNoteScreen(navController: NavController, viewModel: ProfileViewModel) {
 fun NoteDetailScreen(navController: NavController, noteId: String?, viewModel: ProfileViewModel) {
     if (noteId == null) return
 
-    // Mengambil data catatan secara reaktif dari database
     val note by viewModel.getNoteById(noteId).collectAsState(initial = null)
 
     Column(modifier = Modifier.padding(16.dp).fillMaxSize()) {
@@ -144,7 +143,7 @@ fun NoteDetailScreen(navController: NavController, noteId: String?, viewModel: P
             Spacer(modifier = Modifier.height(16.dp))
             Text(note!!.content, style = MaterialTheme.typography.bodyLarge)
 
-            Spacer(modifier = Modifier.weight(1f)) // Mendorong tombol ke bawah
+            Spacer(modifier = Modifier.weight(1f))
 
             Button(
                 onClick = { navController.navigate(Screen.EditNote.createRoute(noteId)) },
@@ -168,7 +167,6 @@ fun EditNoteScreen(navController: NavController, noteId: String?, viewModel: Pro
     if (noteId == null) return
     val note by viewModel.getNoteById(noteId).collectAsState(initial = null)
 
-    // Mengisi form otomatis dengan data yang sudah ada
     var title by remember(note) { mutableStateOf(note?.title ?: "") }
     var content by remember(note) { mutableStateOf(note?.content ?: "") }
 
@@ -195,8 +193,8 @@ fun EditNoteScreen(navController: NavController, noteId: String?, viewModel: Pro
         Button(
             onClick = {
                 if (title.isNotBlank()) {
-                    viewModel.updateNote(noteId, title, content) // Update ke database
-                    navController.popBackStack() // Kembali ke layar sebelumnya
+                    viewModel.updateNote(noteId, title, content)
+                    navController.popBackStack()
                 }
             },
             modifier = Modifier.fillMaxWidth()

@@ -18,8 +18,7 @@ class ProfileRepository(
     private val dataStore: DataStore<Preferences>
 ) {
     private val queries = db.noteEntityQueries
-
-    // --- DATASTORE (Profile & Theme) ---
+    
     private val THEME_KEY = booleanPreferencesKey("is_dark_mode")
     private val NAME_KEY = stringPreferencesKey("profile_name")
     private val BIO_KEY = stringPreferencesKey("profile_bio")
@@ -36,7 +35,6 @@ class ProfileRepository(
         }
     }
 
-    // --- SQLDELIGHT (Notes CRUD & Search) ---
     fun getNotes(query: String = ""): Flow<List<NoteEntity>> {
         return if (query.isBlank()) {
             queries.getAllNotes().asFlow().mapToList(Dispatchers.IO)

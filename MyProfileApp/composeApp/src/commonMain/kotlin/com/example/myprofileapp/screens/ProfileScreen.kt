@@ -23,7 +23,6 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ProfileScreen(viewModel: ProfileViewModel = viewModel()) {
-    // Membaca state yang sudah dipecah secara individual
     val isDarkMode by viewModel.isDarkMode.collectAsState()
     val name by viewModel.name.collectAsState()
     val bio by viewModel.bio.collectAsState()

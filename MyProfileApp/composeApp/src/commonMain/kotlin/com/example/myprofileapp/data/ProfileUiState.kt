@@ -11,6 +11,5 @@ data class ProfileUiState(
     val name: String = "Reyhan Oktavian Putra",
     val bio: String = "Mahasiswa Institut Teknologi Sumatera",
     val isDarkMode: Boolean = false,
-    // Note list kosong secara default
     val notes: List<Note> = emptyList()
 )
