@@ -10,7 +10,6 @@ plugins {
 }
 
 kotlin {
-    // INI YANG BIKIN CRASH SEBELUMNYA, SUDAH DIPERBAIKI:
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -37,6 +36,8 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation("app.cash.sqldelight:android-driver:2.0.1")
             implementation("androidx.datastore:datastore-preferences:1.1.0")
+            implementation("io.insert-koin:koin-android:3.5.3")
+            implementation("io.insert-koin:koin-androidx-compose:3.5.3")
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -49,12 +50,13 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
             implementation(compose.materialIconsExtended)
-
-            // Library Lokal & Database
             implementation("app.cash.sqldelight:runtime:2.0.1")
             implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
             implementation("androidx.datastore:datastore-preferences-core:1.1.0")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")
+            implementation("io.insert-koin:koin-core:3.5.3")
+            implementation("io.insert-koin:koin-compose:1.1.2")
+            implementation("io.insert-koin:koin-compose-viewmodel:1.2.0-Beta4")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

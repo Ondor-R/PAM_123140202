@@ -10,22 +10,20 @@ import com.example.myprofileapp.data.ProfileRepository
 import com.example.myprofileapp.db.NoteDatabase
 import com.example.myprofileapp.navigation.AppNavigation
 import com.example.myprofileapp.viewmodel.ProfileViewModel
+import org.koin.compose.KoinContext
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun App(database: NoteDatabase, dataStore: DataStore<Preferences>) {
-    val repository = remember { ProfileRepository(database, dataStore) }
-    val viewModel = remember { ProfileViewModel(repository) }
+fun App() {
+    KoinContext {
+        val viewModel = koinViewModel<ProfileViewModel>()
+        val isDarkMode by viewModel.isDarkMode.collectAsState()
+        val colorScheme = if (isDarkMode) darkColorScheme() else lightColorScheme()
 
-    val isDarkMode by viewModel.isDarkMode.collectAsState()
-
-    val colorScheme = if (isDarkMode) darkColorScheme() else lightColorScheme()
-
-    MaterialTheme(colorScheme = colorScheme) {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            AppNavigation(viewModel = viewModel)
+        MaterialTheme(colorScheme = colorScheme) {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                AppNavigation(viewModel = viewModel)
+            }
         }
     }
 }

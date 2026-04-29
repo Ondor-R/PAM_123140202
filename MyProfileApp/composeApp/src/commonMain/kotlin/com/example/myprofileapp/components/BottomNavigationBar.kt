@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,13 +18,14 @@ fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         Screen.Notes to Icons.Default.List,
         Screen.Favorites to Icons.Default.Favorite,
-        Screen.Profile to Icons.Default.Person
+        Screen.Profile to Icons.Default.Person,
+        Screen.Settings to Icons.Default.Settings
     )
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    if (currentRoute in listOf(Screen.Notes.route, Screen.Favorites.route, Screen.Profile.route)) {
+    if (currentRoute in listOf(Screen.Notes.route, Screen.Favorites.route, Screen.Profile.route, Screen.Settings.route)) {
         NavigationBar {
             items.forEach { (screen, icon) ->
                 NavigationBarItem(

@@ -13,13 +13,15 @@ import androidx.navigation.navArgument
 import com.example.myprofileapp.components.BottomNavigationBar
 import com.example.myprofileapp.screens.*
 import com.example.myprofileapp.viewmodel.ProfileViewModel
+import com.example.myprofileapp.components.NetworkStatusIndicator
 
 @Composable
 fun AppNavigation(viewModel: ProfileViewModel = viewModel()) {
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController = navController) }
+        topBar = {NetworkStatusIndicator()},
+        bottomBar = {BottomNavigationBar(navController = navController)}
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -29,6 +31,7 @@ fun AppNavigation(viewModel: ProfileViewModel = viewModel()) {
             composable(Screen.Notes.route) { NotesScreen(navController, viewModel) }
             composable(Screen.Favorites.route) { FavoritesScreen(viewModel) }
             composable(Screen.Profile.route) { ProfileScreen(viewModel) }
+            composable(Screen.Settings.route) { SettingsScreen() }
 
             composable(
                 route = Screen.NoteDetail.route,
