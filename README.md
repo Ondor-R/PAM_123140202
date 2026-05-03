@@ -1,7 +1,7 @@
 Nama: Reyhan Oktavian Putra <br>
 NIM: 123140202
 
-Tugas8 <br>
+Tugas8 -> MyProfileApp<br>
 Link video: https://drive.google.com/file/d/1dD7Zyp3XzV84mxxbb2oxVBAKhpUZz9Kv/view?usp=sharing 
 
 Screenshot: <br>
