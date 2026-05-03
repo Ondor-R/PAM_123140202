@@ -11,12 +11,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myprofileapp.navigation.Screen
-import com.example.myprofileapp.viewmodel.ProfileViewModel
 import com.example.myprofileapp.viewmodel.NotesUiState
-import androidx.compose.ui.text.font.FontWeight
+import com.example.myprofileapp.viewmodel.ProfileViewModel
 
 @Composable
 fun NotesScreen(navController: NavController, viewModel: ProfileViewModel) {
@@ -39,7 +39,6 @@ fun NotesScreen(navController: NavController, viewModel: ProfileViewModel) {
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
             )
-
 
             when (val state = uiState) {
                 is NotesUiState.Loading -> {
@@ -93,6 +92,15 @@ fun AddNoteScreen(navController: NavController, viewModel: ProfileViewModel) {
     var title by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
 
+    val aiState by viewModel.aiTitleState.collectAsState()
+
+    LaunchedEffect(aiState.suggestedTitle) {
+        aiState.suggestedTitle?.let {
+            title = it
+            viewModel.clearAiTitleState()
+        }
+    }
+
     Column(Modifier.padding(16.dp).fillMaxSize(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("Buat Catatan Baru", style = MaterialTheme.typography.headlineMedium)
 
@@ -103,13 +111,44 @@ fun AddNoteScreen(navController: NavController, viewModel: ProfileViewModel) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        Button(
+            onClick = { viewModel.generateTitleWithAi(content) },
+            enabled = content.isNotBlank() && !aiState.isLoading,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (aiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    strokeWidth = 2.dp
+                )
+                Spacer(Modifier.width(8.dp))
+                Text("AI sedang berpikir...")
+            } else {
+                Icon(Icons.Default.AutoAwesome, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text("Generate Judul dengan AI")
+            }
+        }
+
+        aiState.error?.let { errorMsg ->
+            Text(
+                text = errorMsg,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
         OutlinedTextField(
             value = content,
             onValueChange = { content = it },
             label = { Text("Isi Catatan") },
             modifier = Modifier.fillMaxWidth(),
-            minLines = 5
+            minLines = 4
         )
+
+        Spacer(modifier = Modifier.weight(1f))
 
         Button(
             onClick = {
@@ -170,6 +209,15 @@ fun EditNoteScreen(navController: NavController, noteId: String?, viewModel: Pro
     var title by remember(note) { mutableStateOf(note?.title ?: "") }
     var content by remember(note) { mutableStateOf(note?.content ?: "") }
 
+    val aiState by viewModel.aiTitleState.collectAsState()
+
+    LaunchedEffect(aiState.suggestedTitle) {
+        aiState.suggestedTitle?.let {
+            title = it
+            viewModel.clearAiTitleState()
+        }
+    }
+
     Column(Modifier.padding(16.dp).fillMaxSize(), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text("Edit Catatan", style = MaterialTheme.typography.headlineMedium)
 
@@ -180,12 +228,41 @@ fun EditNoteScreen(navController: NavController, noteId: String?, viewModel: Pro
             modifier = Modifier.fillMaxWidth()
         )
 
+        Button(
+            onClick = { viewModel.generateTitleWithAi(content) },
+            enabled = content.isNotBlank() && !aiState.isLoading,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (aiState.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    strokeWidth = 2.dp
+                )
+                Spacer(Modifier.width(8.dp))
+                Text("AI sedang merevisi...")
+            } else {
+                Icon(Icons.Default.AutoAwesome, contentDescription = null)
+                Spacer(Modifier.width(8.dp))
+                Text("Revisi Judul dengan AI")
+            }
+        }
+
+        aiState.error?.let { errorMsg ->
+            Text(
+                text = errorMsg,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
+
         OutlinedTextField(
             value = content,
             onValueChange = { content = it },
             label = { Text("Isi Catatan") },
             modifier = Modifier.fillMaxWidth(),
-            minLines = 5
+            minLines = 4
         )
 
         Spacer(modifier = Modifier.weight(1f))

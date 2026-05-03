@@ -2,6 +2,7 @@ package com.example.myprofileapp.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.myprofileapp.ai.*
 import com.example.myprofileapp.data.ProfileRepository
 import com.example.myprofileapp.db.NoteEntity
 import kotlinx.coroutines.flow.*
@@ -14,7 +15,13 @@ sealed class NotesUiState {
     data class Success(val notes: List<NoteEntity>) : NotesUiState()
 }
 
-class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() {
+data class AiTitleState(
+    val isLoading: Boolean = false,
+    val suggestedTitle: String? = null,
+    val error: String? = null
+)
+
+class ProfileViewModel(private val repository: ProfileRepository, private val geminiService: GeminiService) : ViewModel() {
 
     val isDarkMode = repository.isDarkMode.stateIn(viewModelScope, SharingStarted.Eagerly, false)
     val name = repository.profileName.stateIn(viewModelScope, SharingStarted.Eagerly, "")
@@ -47,5 +54,29 @@ class ProfileViewModel(private val repository: ProfileRepository) : ViewModel() 
 
     fun updateNote(id: String, title: String, content: String) = viewModelScope.launch {
         repository.updateNote(id, title, content)
+    }
+
+    private val _aiTitleState = MutableStateFlow(AiTitleState())
+    val aiTitleState = _aiTitleState.asStateFlow()
+
+    fun generateTitleWithAi(content: String) {
+        if (content.isBlank()) return
+
+        _aiTitleState.value = AiTitleState(isLoading = true)
+
+        viewModelScope.launch {
+            geminiService.generateTitle(content)
+                .onSuccess { title ->
+                    _aiTitleState.value = AiTitleState(isLoading = false, suggestedTitle = title)
+                }
+                .onFailure { error ->
+                    val errorMsg = (error as? AIError)?.message ?: "Error sistem: ${error.message}"
+                    _aiTitleState.value = AiTitleState(isLoading = false, error = errorMsg)
+                }
+        }
+    }
+
+    fun clearAiTitleState() {
+        _aiTitleState.value = AiTitleState()
     }
 }
