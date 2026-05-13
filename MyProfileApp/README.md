@@ -32,10 +32,10 @@ Terdapat 6 *Test Cases* untuk `ProfileViewModel` yang memadukan **MockK** untuk 
 2. ✅ `searchQuery flow updates state correctly`: Memastikan `StateFlow` dari kolom pencarian bereaksi dengan cepat saat pengguna mengetik.
 
 **Unit Tests (MockK):**
-3. ✅ `addNote calls saveNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menambah catatan.
-4. ✅ `deleteNote calls deleteNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menghapus catatan.
-5. ✅ `toggleFavorite calls toggleFavorite on repository`: Memverifikasi interaksi ViewModel ke Repository saat mengubah status favorit.
-6. ✅ `generateTitleWithAi updates aiTitleState securely on success`: Menguji integrasi `GeminiService` dan memastikan `aiTitleState` menangkap nilai *suggestedTitle* tanpa *error*.
+3. ✅ `addNote calls saveNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menambah catatan. <br>
+4. ✅ `deleteNote calls deleteNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menghapus catatan. <br>
+5. ✅ `toggleFavorite calls toggleFavorite on repository`: Memverifikasi interaksi ViewModel ke Repository saat mengubah status favorit. <br>
+6. ✅ `generateTitleWithAi updates aiTitleState securely on success`: Menguji integrasi `GeminiService` dan memastikan `aiTitleState` menangkap nilai *suggestedTitle* tanpa *error*. <br>
 
 ### C. UI Tests (`NotesScreenTest.kt`)
 Terdapat 3 *UI Test Cases* menggunakan **Compose Test Rule** dan **Robolectric** untuk menyimulasikan antarmuka di lingkungan lokal:
