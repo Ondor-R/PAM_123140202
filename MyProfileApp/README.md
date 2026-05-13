@@ -31,10 +31,17 @@ Terdapat 6 *Test Cases* untuk `ProfileViewModel` yang memadukan **MockK** untuk 
 1. ✅ `notesUiState emits Loading then Success state`: Menguji urutan transisi aliran data dari status *Loading* menjadi *Success* saat memuat catatan.
 2. ✅ `searchQuery flow updates state correctly`: Memastikan `StateFlow` dari kolom pencarian bereaksi dengan cepat saat pengguna mengetik.
 
-**Unit Tests (MockK):** <br>
-3. ✅ `addNote calls saveNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menambah catatan. <br>
-4. ✅ `deleteNote calls deleteNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menghapus catatan. <br>
-5. ✅ `toggleFavorite calls toggleFavorite on repository`: Memverifikasi interaksi ViewModel ke Repository saat mengubah status favorit. <br>
+**Unit Tests (MockK):**
+3. ✅ `addNote calls saveNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menambah catatan.
+4. ✅ `deleteNote calls deleteNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menghapus catatan.
+5. ✅ `toggleFavorite calls toggleFavorite on repository`: Memverifikasi interaksi ViewModel ke Repository saat mengubah status favorit.
+6. ✅ `generateTitleWithAi updates aiTitleState securely on success`: Menguji integrasi `GeminiService` dan memastikan `aiTitleState` menangkap nilai *suggestedTitle* tanpa *error*.
+
+### C. UI Tests (`NotesScreenTest.kt`)
+Terdapat 3 *UI Test Cases* menggunakan **Compose Test Rule** dan **Robolectric** untuk menyimulasikan antarmuka di lingkungan lokal:
+1. ✅ `testEmptyState_showsEmptyMessage`: Memastikan teks instruksi *"Belum ada catatan..."* muncul ketika database kosong.
+2. ✅ `testSuccessState_displaysNotes`: Memastikan antarmuka berhasil me-render daftar kartu catatan saat data tersedia.
+3. ✅ `testLoadingState_doesNotDisplayNotesOrEmptyMessage`: Memastikan tidak ada data tumpang tindih (*overlap*) atau teks kosong yang muncul selama animasi *loading* berputar.
 
 ## 📊 Screenshot
 Hasil Test: <br>
@@ -44,6 +51,9 @@ Hasil Test: <br>
 
 Hasil Report: <br>
 <img width="1224" height="521" alt="image" src="https://github.com/user-attachments/assets/279cfe86-bdf4-442f-95b4-4c2917499f7e" />
+
+## 🎥 Video Demo
+https://drive.google.com/file/d/1mB-bx3FeTBHVWdb1mK_cSomx6P2oOHoP/view?usp=sharing
 
 
 
