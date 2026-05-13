@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeHotReload)
     kotlin("plugin.serialization") version "2.0.0"
     id("app.cash.sqldelight") version "2.0.1"
+    id("org.jetbrains.kotlinx.kover") version "0.7.3"
 }
 
 kotlin {
@@ -67,10 +68,21 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation("app.cash.turbine:turbine:1.1.0")
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.0")
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+        }
+        val androidUnitTest by getting {
+            dependencies {
+                implementation("io.mockk:mockk:1.13.10")
+                implementation("org.robolectric:robolectric:4.11.1")
+                implementation("androidx.compose.ui:ui-test-manifest")
+            }
         }
     }
 }
@@ -124,10 +136,17 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
     debugImplementation(libs.compose.uiTooling)
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
 compose.desktop {

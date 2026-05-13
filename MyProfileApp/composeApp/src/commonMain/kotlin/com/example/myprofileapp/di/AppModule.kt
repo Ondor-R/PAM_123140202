@@ -12,9 +12,13 @@ import org.koin.dsl.module
 
 expect val platformModule: Module
 
-val commonModule = module {
+//Data Module (Khusus Repository & Database)
+val dataModule = module {
     single { ProfileRepository(get(), get()) }
+}
 
+//Network/AI Module (Khusus API & Ktor)
+val networkModule = module {
     single {
         HttpClient {
             install(ContentNegotiation) {
@@ -25,10 +29,12 @@ val commonModule = module {
             }
         }
     }
-
     single { GeminiService(get()) }
+}
 
+//ViewModel Module (Khusus UI State Holders)
+val viewModelModule = module {
     factory { ProfileViewModel(get(), get()) }
 }
 
-val appModules = listOf(commonModule, platformModule)
+val appModules = listOf(dataModule, networkModule, viewModelModule, platformModule)
