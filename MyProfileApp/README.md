@@ -31,7 +31,7 @@ Terdapat 6 *Test Cases* untuk `ProfileViewModel` yang memadukan **MockK** untuk 
 1. ✅ `notesUiState emits Loading then Success state`: Menguji urutan transisi aliran data dari status *Loading* menjadi *Success* saat memuat catatan.
 2. ✅ `searchQuery flow updates state correctly`: Memastikan `StateFlow` dari kolom pencarian bereaksi dengan cepat saat pengguna mengetik.
 
-**Unit Tests (MockK):**
+**Unit Tests (MockK):** <br>
 3. ✅ `addNote calls saveNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menambah catatan. <br>
 4. ✅ `deleteNote calls deleteNote on repository`: Memverifikasi interaksi ViewModel ke Repository saat menghapus catatan. <br>
 5. ✅ `toggleFavorite calls toggleFavorite on repository`: Memverifikasi interaksi ViewModel ke Repository saat mengubah status favorit. <br>
